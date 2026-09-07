@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | Ducky Arenas</title>
+    <style>
+        :root {
+            --bg-dark: #07111f;
+            --bg-panel: rgba(10, 25, 42, 0.8);
+            --bg-panel-strong: rgba(12, 35, 58, 0.95);
+            --line: rgba(121, 204, 255, 0.25);
+            --primary: #59b6ff;
+            --primary-strong: #1d9bf0;
+            --accent: #8fe3ff;
+            --text: #eaf7ff;
+            --muted: #9bc2d8;
+            --danger: #ff6d8d;
+            --shadow: 0 18px 40px rgba(8, 20, 34, 0.65);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(29, 155, 240, 0.22), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(96, 208, 255, 0.18), transparent 25%),
+                linear-gradient(135deg, #040b14 0%, #071724 35%, #0c1f2f 100%);
+            color: var(--text);
+        }
+
+        .shell {
+            width: min(100%, 980px);
+            min-height: 700px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: rgba(5, 16, 27, 0.72);
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            position: relative;
+            padding: 56px 48px;
+            background:
+                linear-gradient(180deg, rgba(8, 28, 44, 0.75), rgba(5, 17, 30, 0.9)),
+                url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        }
+
+        .brand::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(11, 123, 201, 0.28), rgba(12, 29, 48, 0.2));
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border: 1px solid rgba(143, 227, 255, 0.4);
+            background: rgba(12, 25, 39, 0.35);
+            border-radius: 999px;
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .brand-badge::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            box-shadow: 0 0 15px rgba(89, 182, 255, 0.9);
+        }
+
+        .brand h1 {
+            margin: 24px 0 18px;
+            font-size: clamp(2.4rem, 4vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.05em;
+            max-width: 420px;
+        }
+
+        .brand p {
+            margin: 0;
+            max-width: 420px;
+            font-size: 1.03rem;
+            line-height: 1.7;
+            color: rgba(234, 247, 255, 0.8);
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .feature-item i {
+            width: 24px;
+            height: 24px;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(89, 182, 255, 0.15);
+            color: var(--accent);
+            box-shadow: inset 0 0 0 1px rgba(143, 227, 255, 0.18);
+            font-style: normal;
+            font-size: 0.8rem;
+        }
+
+        .panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 32px;
+            background: linear-gradient(180deg, rgba(6, 19, 30, 0.92), rgba(8, 19, 33, 0.97));
+        }
+
+        .form-wrapper {
+            position: relative;
+            width: min(100%, 420px);
+            padding: 30px 28px;
+            border: 1px solid rgba(122, 193, 255, 0.2);
+            border-radius: 20px;
+            background: rgba(8, 18, 29, 0.85);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .heading {
+            margin-bottom: 24px;
+        }
+
+        .heading small {
+            display: block;
+            color: var(--primary);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            margin-bottom: 10px;
+        }
+
+        .heading h2 {
+            margin: 0;
+            font-size: clamp(1.8rem, 3vw, 2.3rem);
+            letter-spacing: -0.04em;
+        }
+
+        .login-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .field-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.82rem;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid rgba(143, 227, 255, 0.18);
+            border-radius: 12px;
+            background: rgba(13, 27, 40, 0.9);
+            color: var(--text);
+            padding: 13px 14px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(89, 182, 255, 0.9);
+            box-shadow: 0 0 0 3px rgba(89, 182, 255, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .helptext,
+        .field-errors {
+            margin: 0;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .field-errors {
+            color: var(--danger);
+        }
+
+        .submit-btn {
+            margin-top: 10px;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            color: #041827;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            box-shadow: 0 12px 22px rgba(29, 155, 240, 0.34);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 26px rgba(29, 155, 240, 0.44);
+        }
+
+        .register-link {
+            margin-top: 18px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .register-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .home-link {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(143, 227, 255, 0.18);
+            background: rgba(13, 27, 40, 0.6);
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .home-link:hover {
+            border-color: rgba(89, 182, 255, 0.7);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 860px) {
+            .shell {
+                grid-template-columns: 1fr;
+                margin: 20px;
+            }
+
+            .brand {
+                min-height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <section class="brand">
+            <div class="brand-content">
+                <div>
+                    <div class="brand-badge">Ducky Arenas</div>
+                    <h1>Conquista cada arena.</h1>
+                    <p>
+                        Ingresa para seguir tu progreso, competir con la comunidad y vivir cada partida con más intensidad.
+                    </p>
+                </div>
+
+                <div class="feature-list">
+                    <div class="feature-item"><i>✓</i> Ranking actualizado</div>
+                    <div class="feature-item"><i>✓</i> Torneos activos</div>
+                    <div class="feature-item"><i>✓</i> Comunidad gamer</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="form-wrapper">
+                <a class="home-link" href="{% url 'core:home' %}">Volver al inicio</a>
+
+                <div class="heading">
+                    <small>Bienvenido</small>
+                    <h2>Iniciar sesión</h2>
+                </div>
+
+                <form method="post" class="login-form">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="field-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="helptext">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="field-errors">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="submit-btn">Entrar</button>
+                </form>
+
+                <div class="register-link">
+                    ¿No tienes cuenta? <a href="{% url 'accounts:register' %}">Regístrate</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

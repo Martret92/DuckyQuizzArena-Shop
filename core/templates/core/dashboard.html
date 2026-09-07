@@ -1,0 +1,18 @@
+<h1>
+    Hola, {{ request.user.username }}
+</h1>
+
+<p>
+    Nivel:
+    {{ request.user.profile.level }}
+</p>
+
+<p>
+    XP:
+    {{ request.user.profile.xp }}
+</p>
+
+<p>
+    Ducky Coins:
+    {{ request.user.profile.ducky_coins }}
+</p>
