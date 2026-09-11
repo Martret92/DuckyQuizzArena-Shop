@@ -279,6 +279,23 @@ Después instalar las dependencias:
 ```bash
 pip install -r requirements.txt
 ```
+### Configuración de la SECRET_KEY
+
+La clave secreta de Django no se almacena en el repositorio.
+
+Antes de ejecutar Django, define la variable de entorno `DJANGO_SECRET_KEY`.
+
+En PowerShell:
+
+```powershell
+$env:DJANGO_SECRET_KEY="tu-clave-local"
+```
+Puedes generar una clave nueva desde Django con:
+
+```powershell
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+La variable debe estar disponible en la terminal desde la que ejecutes `manage.py`.
 
 Aplicar migraciones:
 
