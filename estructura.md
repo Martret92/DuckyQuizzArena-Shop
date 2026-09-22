@@ -1,3 +1,4 @@
+```text
 shop/
 │
 ├── migrations/
@@ -26,6 +27,8 @@ shop/
 ├── services.py
 ├── urls.py
 └── views.py
+```
+
 
 
 | Archivo/parte      |      M1      |    M2 (tú)   |      M3      |
