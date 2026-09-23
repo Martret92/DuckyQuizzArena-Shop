@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | Ducky Shop</title>
+</head>
+<body>
+    <main>
+        <nav>
+            <a href="{% url 'shop:catalog' %}">
+                ← Volver al catálogo
+            </a>
+        </nav>
+
+        <article>
+            <header>
+                <h1>{{ product.name }}</h1>
+                <p>{{ product.description }}</p>
+            </header>
+
+            <section>
+                <p>
+                    <strong>Precio:</strong>
+                    {{ product.price }} Ducky Coins
+                </p>
+
+                <p>
+                    <strong>Rareza:</strong>
+                    {{ product.rarity }}
+                </p>
+
+                <p>
+                    <strong>Tipo:</strong>
+                    {{ product.item_type }}
+                </p>
+
+                <p>
+                    <strong>Estado:</strong>
+                    {% if product.available %}
+                        Disponible
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </p>
+            </section>
+        </article>
+    </main>
+</body>
+</html>
