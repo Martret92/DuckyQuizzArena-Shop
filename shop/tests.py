@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, transaction
+from django.db.models import Sum
 from django.test import TestCase
 from django.utils import timezone
 
@@ -123,6 +124,7 @@ class TransactionTests(TestCase):
         second = self.create_transaction()
         self.wallet.transactions.update(created_at=timezone.now())
         self.assertEqual(list(self.wallet.transactions.all()), [second, first])
+        self.assertEqual(self.wallet.transactions.first(), second)
 
     def test_transaction_has_exactly_the_requested_fields(self):
         self.assertEqual(
@@ -175,6 +177,13 @@ class TransactionTests(TestCase):
         )
 
         self.assertCountEqual(
+            self.wallet.transactions.filter(
+                transaction_type=TransactionType.ADJUSTMENT
+            ),
+            [credit, debit],
+        )
+
+        self.assertCountEqual(
             self.wallet.transactions.filter(amount__gt=0),
             [reward, credit],
         )
@@ -188,3 +197,29 @@ class TransactionTests(TestCase):
             Transaction.objects.filter(wallet__user=self.user),
             [reward, purchase, credit, debit],
         )
+
+    def test_sum_amount_returns_historical_audit_total(self):
+        # Historical audit only; the official balance is user.profile.ducky_coins.
+        # This calculation neither reads nor updates that official balance.
+        self.create_transaction(TransactionType.REWARD, 100)
+        self.create_transaction(TransactionType.PURCHASE, -40)
+        self.create_transaction(TransactionType.ADJUSTMENT, 10)
+        self.create_transaction(TransactionType.ADJUSTMENT, -5)
+
+        other_user = get_user_model().objects.create_user(username="audit_other_user")
+        other_wallet = Wallet.objects.create(user=other_user)
+        Transaction.objects.create(
+            wallet=other_wallet,
+            transaction_type=TransactionType.REWARD,
+            amount=1000,
+        )
+
+        audit = self.wallet.transactions.aggregate(historical_total=Sum("amount"))
+
+        self.assertEqual(audit, {"historical_total": 65})
+
+    def test_sum_amount_returns_none_for_empty_wallet_history(self):
+        # An empty historical audit returns None (SQL NULL), not an official balance.
+        audit = self.wallet.transactions.aggregate(historical_total=Sum("amount"))
+
+        self.assertEqual(audit, {"historical_total": None})
